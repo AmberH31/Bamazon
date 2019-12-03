@@ -9,16 +9,17 @@ var connection = mysql.createConnection({
   // Your port; if not 3306
   port: 3306,
   // Your username
-  user: "root",
+  user: process.env.userDB,
   // Your password
-  password: "",
-  database: "bamazon"
+  password: process.env.passDB,
+  database: process.env.db
 });
 
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   displaySale();
+  setTimeout(customerInquiry, 1000);
   //queryAllSongs();
   //queryDanceSongs();
 });
@@ -34,12 +35,55 @@ function displaySale() {
       var price = "Price: $" + res[i].price;
       var quantity = "Quantity: " + res[i].stock_quantity;
 
-      let data;
+      //   let data;
       data = [id, name, department, price, quantity];
       tableData.push(data);
     }
     var output = table(tableData);
     console.log(output);
-    // purchasePrompt();
   });
+}
+
+function customerInquiry() {
+  inquirer
+    .prompt([
+      {
+        name: "itemID",
+        type: "number",
+        message: "Please choose the item ID."
+        // validate: function(input) {
+        //   if (input == NaN) {
+        //     return false;
+        //   }
+        // }
+      },
+      {
+        name: "amount",
+        type: "number",
+        message: "How many whould you like?"
+        // validate: function(input) {
+        //   if (input == NaN) {
+        //     return false;
+        //   }
+        // }
+      }
+    ])
+    .then(function(answer) {
+      //   console.log(answer);
+      var queryURL = "SELECT * FROM products WHERE id = ?";
+      connection.query(queryURL, answer.itemID, function(err, res) {
+        if (err) throw err;
+        if (!res.length) {
+          console.log("\r\n");
+          console.log("Sorry, we don't have this item. Please try again!");
+          setTimeout(customerInquiry, 1000);
+        } else if (parseInt(answer.amount) > parseInt(res[0].stock_quantity)) {
+          console.log("\r\n");
+          console.log(
+            "Sorry, you select the amount that is greater than what we have. Please try again!"
+          );
+          setTimeout(customerInquiry, 1000);
+        }
+      });
+    });
 }
