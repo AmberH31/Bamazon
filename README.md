@@ -1,2 +1,2 @@
-# Bmazon
-![GitHub Logo](/screen_shot.jpg)
+# Bamazon
+![Bamazon Screen Shot](../screen_shot.jpg)
