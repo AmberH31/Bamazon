@@ -1,2 +1,2 @@
 # Bamazon
-![Bamazon Screen Shot](/screen_shot.jpg)
+![Bamazon Screen Shot](/images/screen_shot.jpg)
