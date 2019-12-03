@@ -83,6 +83,24 @@ function customerInquiry() {
             "Sorry, you select the amount that is greater than what we have. Please try again!"
           );
           setTimeout(customerInquiry, 1000);
+        } else if (parseInt(answer.amount) <= parseInt(res[0].stock_quantity)) {
+          var totalCost = res[0].price * answer.amount;
+          console.log("\r\n");
+          console.log("Good news your order is in stock!");
+          console.log(
+            "Your total cost for " +
+              " " +
+              answer.amount +
+              " " +
+              res[0].product_name +
+              " is $" +
+              totalCost +
+              ". Thank you!"
+          );
+          //   connection.query("UPDATE products SET ? WHERE ?", [
+          //     { product_sales= product_sales +totalCost},
+          //   ]);
+          setTimeout(customerInquiry, 1000);
         }
       });
     });
